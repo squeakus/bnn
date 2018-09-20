@@ -25,35 +25,35 @@ class Model(object):
 
       dump_shape_and_product_of('input', model)
 
-      e1 = slim.conv2d(model, num_outputs=base_filter_size, kernel_size=3, stride=2,
+      # e1 = slim.conv2d(model, num_outputs=base_filter_size, kernel_size=3, stride=2,
+      #                  padding='VALID', scope='e1')
+      # if use_batch_norm:
+      #   e1 = slim.batch_norm(e1, decay=0.9, is_training=is_training)
+      # dump_shape_and_product_of('e1', e1)
+
+      e1 = slim.conv2d(model, num_outputs=2*base_filter_size, kernel_size=3, stride=2,
                        padding='VALID', scope='e1')
       if use_batch_norm:
         e1 = slim.batch_norm(e1, decay=0.9, is_training=is_training)
       dump_shape_and_product_of('e1', e1)
 
-      e2 = slim.conv2d(e1, num_outputs=2*base_filter_size, kernel_size=3, stride=2,
+      e2 = slim.conv2d(e1, num_outputs=4*base_filter_size, kernel_size=3, stride=2,
                        padding='VALID', scope='e2')
       if use_batch_norm:
-        e2 = slim.batch_norm(e2, decay=0.9, is_training=is_training)
+        e2 = slim.batch_norm(e3, decay=0.9, is_training=is_training)
       dump_shape_and_product_of('e2', e2)
 
-      e3 = slim.conv2d(e2, num_outputs=4*base_filter_size, kernel_size=3, stride=2,
+      e3 = slim.conv2d(e2, num_outputs=8*base_filter_size, kernel_size=3, stride=2,
                        padding='VALID', scope='e3')
       if use_batch_norm:
         e3 = slim.batch_norm(e3, decay=0.9, is_training=is_training)
       dump_shape_and_product_of('e3', e3)
 
-      e4 = slim.conv2d(e3, num_outputs=8*base_filter_size, kernel_size=3, stride=2,
+      e4 = slim.conv2d(e3, num_outputs=16*base_filter_size, kernel_size=3, stride=2,
                        padding='VALID', scope='e4')
       if use_batch_norm:
         e4 = slim.batch_norm(e4, decay=0.9, is_training=is_training)
       dump_shape_and_product_of('e4', e4)
-
-      e5 = slim.conv2d(e4, num_outputs=16*base_filter_size, kernel_size=3, stride=2,
-                       padding='VALID', scope='e5')
-      if use_batch_norm:
-        e5 = slim.batch_norm(e5, decay=0.9, is_training=is_training)
-      dump_shape_and_product_of('e5', e5)
 
       # record bottlenecked shape for resizing back
       # this is clumsy, how to do this more directly from tensors / config?
@@ -61,7 +61,7 @@ class Model(object):
 
 #      model = tf.image.resize_nearest_neighbor(e4, [h*2, w*2])
 #      model = slim.conv2d(model, num_outputs=4*base_filter_size, kernel_size=3, scope='d1')
-      model = slim.conv2d_transpose(e5, num_outputs=8*base_filter_size,
+      model = slim.conv2d_transpose(e4, num_outputs=8*base_filter_size,
                                     kernel_size=3, stride=2, padding='VALID', scope='d1')
       if use_batch_norm:
         model = slim.batch_norm(model, decay=0.9, is_training=is_training)

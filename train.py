@@ -59,8 +59,8 @@ train_model = model.Model(train_imgs,
                           use_batch_norm=not opts.no_use_batch_norm)
 train_model.calculate_losses_wrt(labels=train_xys_bitmaps)
 
-#print("full res test model...")
-#tester = test.ModelTester(opts.test_image_dir, opts.label_dir,
+# print("full res test model...")
+# tester = test.ModelTester(opts.test_image_dir, opts.label_dir,
 #                          opts.batch_size, opts.width, opts.height,
 #                          opts.no_use_skip_connections, opts.base_filter_size,
 #                          opts.no_use_batch_norm)
@@ -120,12 +120,12 @@ while not done:
   train_model.save(sess, "ckpts/%s" % opts.run)
 
   # ... test
-#  stats = tester.test(opts.run)
-#  tag_values = {k: stats[k] for k in ['precision', 'recall', 'f1']}
-#  test_summaries_writer.add_summary(u.explicit_summaries(tag_values), step)
-#  debug_img_summary = u.pil_image_to_tf_summary(stats['debug_img'])
-#  test_summaries_writer.add_summary(debug_img_summary, step)
-#  test_summaries_writer.flush()
+  # stats = tester.test(opts.run)
+  # tag_values = {k: stats[k] for k in ['precision', 'recall', 'f1']}
+  # test_summaries_writer.add_summary(u.explicit_summaries(tag_values), step)
+  # debug_img_summary = u.pil_image_to_tf_summary(stats['debug_img'])
+  # test_summaries_writer.add_summary(debug_img_summary, step)
+  # test_summaries_writer.flush()
 
   # check if done by steps or time
   if step >= opts.steps:

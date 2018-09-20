@@ -20,11 +20,20 @@ def hms(secs):
     return "%02d" % secs
 
 def xys_to_bitmap(xys, height, width, rescale=1.0):
+  w_scaled = int(width*rescale)
+  h_scaled = int(height*rescale)
   # note: include trailing 1 dim to easier match model output
-  bitmap = np.zeros((int(height*rescale), int(width*rescale), 1), dtype=np.float32)
+  bitmap = np.zeros((h_scaled, w_scaled, 1), dtype=np.float32)
   for x, y in xys:
+
     try:
-      bitmap[int(y*rescale), int(x*rescale), 0] = 1.0  # recall images are (height, width)
+      y_scaled = int(y*rescale)
+      x_scaled = int(x*rescale)
+      if y_scaled > h_scaled - 1:
+        y_scaled = h_scaled - 1
+      if x_scaled > w_scaled - 1:
+        x_scaled = w_scaled - 1
+      bitmap[y_scaled, x_scaled, 0] = 1.0  # recall images are (height, width)
     except IndexError as e:
       print("IndexError: are --height and --width correct?")
       raise e
